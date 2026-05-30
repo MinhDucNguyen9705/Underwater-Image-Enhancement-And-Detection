@@ -90,7 +90,7 @@ if __name__ == "__main__":
     losses['edgeL'] = EdgeAwareLoss(loss_type="l2", device="cuda")
 
     losses['hvi_net'] = CIDNet().cuda()
-    pth = r"./CIDNet_weight_LOLv2_bestSSIM.pth"
+    pth = r"./weights/CIDNet_weight_LOLv2_bestSSIM.pth"
     losses['hvi_net'].load_state_dict(torch.load(pth, map_location="cuda"))
     losses['hvi_net'].eval()
 

@@ -1,7 +1,6 @@
 /wandb
 /log
 /data
-/weights
 __pycache__/
 DS_Store
 .vscode/
