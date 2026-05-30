@@ -2,7 +2,7 @@ import math
 import cv2
 import numpy as np
 import torch
-from niqe_utils import calculate_niqe
+from utils.niqe_utils import calculate_niqe
 from skimage.metrics import peak_signal_noise_ratio as compare_psnr
 
 def preprocessing(d_img_org):

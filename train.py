@@ -3,13 +3,13 @@ import argparse
 import sys
 from torchmetrics import MeanMetric
 import torch
-from data_utils import UnderwaterDataset, UnderwaterDatasetNonRef
+from utils.data_utils import UnderwaterDataset, UnderwaterDatasetNonRef
 from torch.utils.data import DataLoader
 from model import myModel
-from uranker import build_model, get_option
-from train_utils import WandbLogger, visualize_results, visualize_results_non_ref, train_step, eval_step, CheckpointSaver, compute_metrics, reset_metrics
+from utils.uranker import build_model, get_option
+from utils.train_utils import WandbLogger, visualize_results, visualize_results_non_ref, train_step, eval_step, CheckpointSaver, compute_metrics, reset_metrics
 from torch import optim
-from loss_utils import PerceptualLoss, L1_Charbonnier_loss, SSIMLoss, EdgeAwareLoss, CIDNet
+from utils.loss_utils import PerceptualLoss, L1_Charbonnier_loss, SSIMLoss, EdgeAwareLoss, CIDNet
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Train the underwater image enhancement model.")
@@ -149,7 +149,7 @@ if __name__ == "__main__":
             wandb_logger.log({f"Valid/{k}": v for k, v in eval_results.items()})
 
         scheduler.step()
-        
+
         if args.checkpoint_interval != -1 and (epoch+1) % args.checkpoint_interval == 0:
             checkpoint_manager.save(
                 model_dict=model_dict,
