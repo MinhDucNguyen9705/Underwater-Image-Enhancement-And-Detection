@@ -51,7 +51,7 @@ def random_augmentation(img, degrade_img, flip_v=True, rot=True):
     return img, degrade_img
 
 class UnderwaterDataset(Dataset):
-    def __init__(self, degrade_dir, ref_dir, img_size, train=True):
+    def __init__(self, degrade_dir, ref_dir, img_size=None, train=True):
         img_names = os.listdir(degrade_dir)
         self.degrade_paths = [os.path.join(degrade_dir, img_name) for img_name in img_names]
         self.ref_paths = [os.path.join(ref_dir, img_name) for img_name in img_names]
@@ -79,13 +79,14 @@ class UnderwaterDataset(Dataset):
             ref_img, degrade_img = random_crop(ref_img, degrade_img, self.img_size)
             ref_img, degrade_img = random_augmentation(ref_img, degrade_img)
         else:
-            degrade_img = TF.resize(degrade_img, size=self.img_size)
-            ref_img = TF.resize(ref_img, size=self.img_size)
+            if self.img_size is not None:
+                degrade_img = TF.resize(degrade_img, size=self.img_size)
+                ref_img = TF.resize(ref_img, size=self.img_size)
 
         return degrade_img, ref_img
 
 class UnderwaterDatasetNonRef(Dataset):
-    def __init__(self, degrade_dir, img_size, train=True):
+    def __init__(self, degrade_dir, img_size=None, train=True):
         img_names = os.listdir(degrade_dir)
         self.degrade_paths = [os.path.join(degrade_dir, img_name) for img_name in img_names]
         self.img_size = img_size
@@ -106,6 +107,7 @@ class UnderwaterDatasetNonRef(Dataset):
             ref_img, degrade_img = random_crop(ref_img, degrade_img, self.img_size)
             ref_img, degrade_img = random_augmentation(ref_img, degrade_img)
         else:
-            degrade_img = TF.resize(degrade_img, size=self.img_size)
-
+            if self.img_size is not None:
+                degrade_img = TF.resize(degrade_img, size=self.img_size)
+    
         return degrade_img

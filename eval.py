@@ -12,7 +12,7 @@ def args_parse():
     parser = argparse.ArgumentParser(description='Evaluate the model on the test set')
     parser.add_argument('--clean_dir', type=str, required=True, help='Directory of clean images')
     parser.add_argument('--ref_dir', type=str, default=None, help='Directory of reference images')
-    parser.add_argument('--img_size', type=int, default=256, help='Size of the input images')
+    parser.add_argument('--img_size', type=int, default=None, help='Size of the input images')
     parser.add_argument('--device', type=str, default='cuda', help='Device to use for evaluation (e.g., "cuda" or "cpu")')
     parser.add_argument('--uranker_config_path', type=str, required=True, help='Path to the URanker config file')
     parser.add_argument('--uranker_ckpt_path', type=str, required=True, help='Path to the URanker checkpoint file')
