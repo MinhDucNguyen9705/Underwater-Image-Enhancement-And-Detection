@@ -5,11 +5,27 @@ import torch
 from torch.utils.data import Dataset
 import torchvision.transforms.functional as TF
 from torchvision.transforms import RandomCrop
+import torch.nn.functional as F
 
 def load_image(img_path):
     img = cv2.imread(img_path)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     return img
+
+def pad_image(img):
+
+    img = torch.from_numpy(img).permute(2, 0, 1) / 255.
+    _, h, w = img.shape
+    pad_h = (4 - (h % 4)) % 4
+    pad_w = (4 - (w % 4)) % 4
+    if pad_h > 0 or pad_w > 0:
+        img = F.pad(img, (0, pad_w, 0, pad_h), mode='reflect')
+        
+    return img, (h, w)
+
+def unpad_image(padded_img, orig_h, orig_w):
+
+    return padded_img[..., :orig_h, :orig_w]
 
 def random_crop(img, degrade_img, img_size=(256, 256)):
     

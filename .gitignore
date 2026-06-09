@@ -5,3 +5,7 @@ __pycache__/
 DS_Store
 .vscode/
 .env
+weights/best_model.pth
+weights/*.pt
+**/*.log
+samples/*
