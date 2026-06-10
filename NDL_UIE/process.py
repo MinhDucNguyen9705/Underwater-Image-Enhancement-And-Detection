@@ -145,8 +145,9 @@ def _process_one(img_path_str: str, out_path_str: str, algo_name: str) -> tuple:
 
 # ── main ─────────────────────────────────────────────────────────────────────
 
-def process(input_dir: Path, num_workers: int) -> None:
-    input_dir = input_dir.resolve()
+def process(input_dir: Path, output_dir: Path, num_workers: int) -> None:
+    input_dir  = input_dir.resolve()
+    output_dir = output_dir.resolve()
     if not input_dir.is_dir():
         sys.exit(f"[ERROR] Not a directory: {input_dir}")
 
@@ -157,11 +158,10 @@ def process(input_dir: Path, num_workers: int) -> None:
     if not images:
         sys.exit(f"[ERROR] No images found in {input_dir}")
 
-    # build output dirs: <parent>/<input_name>_<ALGO>/
-    parent = input_dir.parent
+    # build output dirs: <output_dir>/<input_name>_<ALGO>/
     out_dirs = {}
     for algo_name in ALGORITHMS:
-        d = parent / f"{input_dir.name}_{algo_name}"
+        d = output_dir / f"{input_dir.name}_{algo_name}"
         d.mkdir(parents=True, exist_ok=True)
         out_dirs[algo_name] = d
 
@@ -216,7 +216,7 @@ def process(input_dir: Path, num_workers: int) -> None:
         ok  = ok_counts[algo_name]
         err = err_counts[algo_name]
         status = f"{ok} saved" + (f", {err} error(s)" if err else "")
-        print(f"  {algo_name:<6} → {input_dir.name}_{algo_name}/  [{status}]")
+        print(f"  {algo_name:<6} → {output_dir / f'{input_dir.name}_{algo_name}'}  [{status}]")
 
     print(f"\n✓ Done — {sum(ok_counts.values())} enhanced images written.")
 
@@ -229,8 +229,11 @@ if __name__ == "__main__":
     )
     parser.add_argument("input_dir", type=Path,
                         help="Folder of input images (e.g. C60/)")
+    parser.add_argument("output_dir", type=Path,
+                        help="Root folder for output (e.g. results/); "
+                             "sub-folders like C60_CLAHE/ are created inside it")
     parser.add_argument("-j", "--workers", type=int, default=os.cpu_count(),
                         metavar="N",
                         help=f"parallel workers (default: {os.cpu_count()})")
     args = parser.parse_args()
-    process(args.input_dir, args.workers)
+    process(args.input_dir, args.output_dir, args.workers)
