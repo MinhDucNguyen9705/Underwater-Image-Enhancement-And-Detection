@@ -122,7 +122,6 @@ ALGORITHMS = {
     "CLAHE": _apply_CLAHE,
     "GC":    _apply_GC,
     "ICM":   _apply_ICM,
-    "RGHS":  _apply_RGHS,
     "UCM":   _apply_UCM,
 }
 
