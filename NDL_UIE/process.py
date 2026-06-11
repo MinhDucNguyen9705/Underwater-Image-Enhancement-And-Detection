@@ -121,7 +121,6 @@ def _apply_UCM(img: np.ndarray) -> np.ndarray:
 ALGORITHMS = {
     "CLAHE": _apply_CLAHE,
     "GC":    _apply_GC,
-    "ICM":   _apply_ICM,
     "UCM":   _apply_UCM,
 }
 
