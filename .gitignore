@@ -9,3 +9,4 @@ weights/best_model.pth
 weights/*.pt
 **/*.log
 samples/*
+weights/URanker_ckpt.pth
