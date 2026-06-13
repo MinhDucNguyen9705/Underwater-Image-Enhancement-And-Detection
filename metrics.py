@@ -73,7 +73,7 @@ def get_uciqe(image):
     conl = top - bottom
     uciqe = 0.4680 * delta + 0.2745 * conl + 0.2576 * mu
     return uciqe
-
+%
 def getUCIQE(image):
     # image:  B, H, W, C
 
