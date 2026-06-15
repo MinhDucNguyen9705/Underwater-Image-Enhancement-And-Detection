@@ -124,7 +124,7 @@ def enhance_image(image):
 
 def detect_objects(image, is_clean_image, raw_image, clean_image):
     if image is None:
-        return gr.update(value=None, visible=False)
+        return gr.update(value=None, visible=False), False, None, None
 
     if is_clean_image:
         raw_for_detection = raw_image if raw_image is not None else image
@@ -138,7 +138,18 @@ def detect_objects(image, is_clean_image, raw_image, clean_image):
     annotated_raw = draw_bounding_boxes(raw_for_detection, raw_results)
     annotated_clean = draw_bounding_boxes(clean_for_detection, clean_results)
 
-    return gr.update(value=(annotated_raw, annotated_clean), visible=True)
+    return gr.update(value=(annotated_raw, annotated_clean), visible=True), True, raw_for_detection, clean_for_detection
+
+def remove_annotations(image, is_clean_image, raw_image, clean_image):
+    if image is None:
+        return gr.update(value=None, visible=False)
+
+    if is_clean_image:
+        raw_output = raw_image if raw_image is not None else image
+        clean_output = clean_image if clean_image is not None else image
+        return gr.update(value=(raw_output, clean_output), visible=True)
+
+    return gr.update(value=image, visible=True)
 
 with gr.Blocks(title="Underwater Image Enhancement and Detection") as demo:
     gr.Markdown("# Underwater Image Enhancement and Detection")
@@ -166,6 +177,7 @@ with gr.Blocks(title="Underwater Image Enhancement and Detection") as demo:
     with gr.Row():
         enhance_button = gr.Button("Image Enhancement")
         detect_button = gr.Button("Object Detection")
+        remove_annotations_button = gr.Button("Remove Annotations")
 
     resize_button.click(
         fn=resize_current_image,
@@ -200,6 +212,11 @@ with gr.Blocks(title="Underwater Image Enhancement and Detection") as demo:
     )
     detect_button.click(
         fn=detect_objects,
+        inputs=[input_image, is_clean_image, raw_image_state, clean_image_state],
+        outputs=[output_image, is_clean_image, raw_image_state, clean_image_state],
+    )
+    remove_annotations_button.click(
+        fn=remove_annotations,
         inputs=[input_image, is_clean_image, raw_image_state, clean_image_state],
         outputs=output_image,
     )
